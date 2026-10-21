@@ -1,0 +1,194 @@
+// Prisma 6 Schema
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model PackageCategory {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  location    String // MAKKAH_HARAM, MAKKAH_JABAL, MADINAH_NABAWI
+  description String
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  packages    Package[]
+}
+
+model Package {
+  id           String          @id @default(cuid())
+  categoryId   String
+  category     PackageCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  slug         String          @unique
+  name         String
+  tagline      String?
+  description  String
+  imageUrl     String?
+  isBestSeller Boolean         @default(false)
+  isActive     Boolean         @default(true)
+  deletedAt    DateTime?
+  sortOrder    Int             @default(0)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  variants  PackageVariant[]
+  addOns    PackageAddOn[]
+  auditLogs AuditLog[]
+
+  @@index([categoryId, isActive])
+}
+
+model PackageVariant {
+  id                String   @id @default(cuid())
+  packageId         String
+  package           Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  participantType   String // SENDIRI, BERDUA, KELUARGA
+  label             String // Contoh: "Sendiri (1 orang)", "Keluarga (7 orang)"
+  price             Int // Nominal Rupiah integer murni (misal 1350000)
+  durationMinutes   Int // Durasi pemotretan dalam menit (misal 60, 90, 120)
+  editedPhotosCount Int // Jumlah foto edit (misal 15, 20, 30, 50)
+  reelsDurationSec  Int // Durasi Reels dalam detik (misal 40, 60)
+  benefitsJson      String // Array JSON string untuk rincian benefit
+  isBestSeller      Boolean  @default(false)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([packageId, participantType])
+  @@index([packageId, isActive])
+}
+
+model AddOn {
+  id                  String   @id @default(cuid())
+  slug                String   @unique
+  name                String
+  description         String
+  price               Int // Nominal Rupiah integer
+  unitLabel           String // "per orang", "per 10 foto", "per 30 menit"
+  applicableLocations String // Comma-separated: "MAKKAH_HARAM,MAKKAH_JABAL"
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  packageLinks PackageAddOn[]
+}
+
+model PackageAddOn {
+  packageId String
+  addOnId   String
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  addOn     AddOn   @relation(fields: [addOnId], references: [id], onDelete: Cascade)
+
+  @@id([packageId, addOnId])
+}
+
+model Portfolio {
+  id            String   @id @default(cuid())
+  title         String
+  location      String // MAKKAH, MADINAH, JABAL, AL_ULA
+  mediaType     String   @default("IMAGE") // IMAGE, VIDEO
+  mediaUrl      String
+  thumbnailUrl  String?
+  caption       String?
+  clientConsent Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([location, isActive, isFeatured])
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  clientName   String
+  originCity   String?
+  packageTaken String
+  rating       Int      @default(5)
+  comment      String
+  date         DateTime @default(now())
+  consentGiven Boolean  @default(true)
+  isApproved   Boolean  @default(true)
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isApproved, consentGiven])
+}
+
+model InstagramPost {
+  id        String   @id @default(cuid())
+  postUrl   String
+  imageUrl  String
+  caption   String?
+  likeCount Int?     @default(0)
+  postedAt  DateTime @default(now())
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id                 String   @id @default("default")
+  companyName        String   @default("Rifalvisuals Indonesia")
+  tagline            String   @default("Mengabadikan Perjalanan Ibadah, Menjaga Kenangan Selamanya.")
+  whatsappNumber     String   @default("62881080522136")
+  emailAddress       String   @default("Rifalvisuals2024@gmail.com")
+  instagramHandle    String   @default("rifalvisuals")
+  tiktokHandle       String   @default("rifaal_dii")
+  address            String   @default("Mekkah - Madinah - Indonesia")
+  meetingPointNabawi String   @default("Pintu 333 / 310 Masjid Nabawi")
+  meetingPointHaram  String   @default("WC 3 Pelataran Masjidil Haram")
+  meetingPointJabal  String   @default("Lobby Hotel Al Shohada")
+  dpPercentage       Int      @default(50)
+  announcementText   String?
+  heroImageUrl       String?  @default("/images/hero/hero-makkah.jpeg")
+  aboutImageUrl      String?  @default("/images/hero/about-rifal.jpeg")
+  updatedAt          DateTime @updatedAt
+}
+
+model TrackingEvent {
+  id        String   @id @default(cuid())
+  eventType String // WHATSAPP_CLICK, PRICELIST_VIEW, PACKAGE_SELECT
+  packageId String?
+  metadata  String? // JSON string
+  ipHash    String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([eventType, createdAt])
+}
+
+model AdminUser {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  email        String     @unique
+  passwordHash String
+  name         String
+  role         String     @default("ADMIN")
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model AuditLog {
+  id         String    @id @default(cuid())
+  adminId    String
+  admin      AdminUser @relation(fields: [adminId], references: [id])
+  action     String // UPDATE_PRICE, DEACTIVATE_PACKAGE, CREATE_PACKAGE
+  entityType String // Package, PackageVariant, SiteSetting
+  entityId   String
+  oldValue   String? // JSON string
+  newValue   String? // JSON string
+  package    Package?  @relation(fields: [packageId], references: [id])
+  packageId  String?
+  createdAt  DateTime  @default(now())
+
+  @@index([adminId, createdAt])
+}

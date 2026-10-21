@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #1e3a5f;
+  --color-brand-primary-dark: #0f1d30;
+  --color-brand-primary-light: #2b5284;
+  --color-brand-gold: #d0a526;
+  --color-brand-gold-hover: #b8901e;
+  --color-brand-gold-light: #fbf4de;
+  --color-brand-gold-dark: #8c6d12;
+  --color-brand-dark: #0a0f18;
+  --color-brand-surface-dark: #131c2a;
+  --color-brand-light: #fbfbf9;
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-plus-jakarta);
+}
+
+:root {
+  --background: #fbfbf9;
+  --foreground: #0f172a;
+  --color-primary: #1e3a5f;
+  --color-primary-dark: #0f1d30;
+  --color-primary-light: #2b5284;
+  --color-gold: #d0a526;
+  --color-gold-hover: #b8901e;
+  --color-gold-light: #fbf4de;
+  --color-gold-dark: #8c6d12;
+  --color-bg-light: #fbfbf9;
+  --color-bg-dark: #0a0f18;
+  --color-bg-surface-dark: #131c2a;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Helpers */
+.font-display {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.font-body {
+  font-family: var(--font-plus-jakarta), sans-serif;
+}
+
+/* Subtle Shimmer & Elevation */
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #dfb73d 0%, #d0a526 50%, #b8901e 100%);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #f3d47c 0%, #d0a526 70%, #a27e16 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navy-gradient-bg {
+  background: linear-gradient(180deg, #132238 0%, #0a0f18 100%);
+}
+
+.navy-card-bg {
+  background: linear-gradient(145deg, #162438 0%, #101a2b 100%);
+}
+
+/* Focus styles for keyboard accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

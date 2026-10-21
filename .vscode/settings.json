@@ -1,0 +1,5 @@
+{
+  "prisma.schemaEnginePath": "./node_modules/@prisma/engines/schema-engine-windows.exe",
+  "prisma.pinToPrisma6": true,
+  "css.lint.unknownAtRules": "ignore"
+}
