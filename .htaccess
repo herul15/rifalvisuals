@@ -1,0 +1,15 @@
+# Nonaktifkan PageSpeed agar CSS Next.js langsung tampil instan
+<IfModule pagespeed_module>
+   ModPagespeed off
+</IfModule>
+
+# Nonaktifkan pencarian otomatis index.php/index.html oleh Apache
+DirectoryIndex disabled
+
+RewriteEngine On
+
+# Jika request ke root atau ke index.php, teruskan ke root Next.js
+RewriteRule ^(index\.(php|html?))?$ http://127.0.0.1:3000/ [P,L]
+
+# Teruskan semua route lainnya ke port 3000
+RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]

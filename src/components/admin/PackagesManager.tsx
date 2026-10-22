@@ -11,7 +11,6 @@ import {
   ToggleRight,
   MapPin,
   Camera,
-  ImageIcon,
 } from "lucide-react";
 import { formatRupiah } from "@/lib/whatsapp";
 import MediaPickerModal from "@/components/admin/MediaPickerModal";

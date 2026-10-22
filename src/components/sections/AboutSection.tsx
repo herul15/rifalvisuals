@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Award, HeartHandshake, Eye, CheckCircle2 } from "lucide-react";
+import { Award, HeartHandshake, Eye } from "lucide-react";
 
 interface AboutSectionProps {
   aboutImageUrl?: string | null;

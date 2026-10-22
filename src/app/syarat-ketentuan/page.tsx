@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { generateGeneralInquiryUrl } from "@/lib/whatsapp";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Syarat & Ketentuan Pemesanan | Rifalvisuals Indonesia",
   description:

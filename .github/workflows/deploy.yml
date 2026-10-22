@@ -1,0 +1,85 @@
+name: CI/CD Pipeline - Rifalvisuals
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Unit & Integration Tests
+        run: npm run test
+
+      - name: Build Next.js Production Bundle
+        run: npm run build
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+          NEXT_PUBLIC_WHATSAPP_NUMBER: "62881080522136"
+          JWT_SECRET: "rifalvisuals_secret_jwt_key_umroh_2026_production"
+
+      - name: Clean temporary build cache
+        run: |
+          rm -rf .next/cache .next/dev
+
+      - name: Deploy to DomaiNesia cPanel via Rsync
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: easingthemes/ssh-deploy@v6
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT || '22' }}
+          SOURCE: "/"
+          TARGET: ${{ secrets.REMOTE_TARGET || '/home/rifalvi1/public_html/' }}
+          ARGS: "-rlgoDzvc -i"
+          EXCLUDE: "/.git/, /node_modules/, /.github/, /tests/, *.env, .env*, .next/cache/, .next/dev/"
+          SCRIPT_AFTER: |
+            TARGET_DIR="${{ secrets.REMOTE_TARGET || '/home/rifalvi1/public_html/' }}"
+            cd "$TARGET_DIR"
+
+            # 1. Pastikan dependency production terinstal
+            npm install --omit=dev
+
+            # 2. Sinkronisasi Prisma Client & PostgreSQL database
+            npx prisma generate
+            npx prisma db push
+
+            # 3. Pastikan izin akses .next tepat untuk web server
+            chmod -R 755 .next
+
+            # 4. Restart aplikasi Next.js di PM2
+            npx pm2 restart all
+
+            echo "=== DEPLOYMENT COMPLETED SUCCESSFULLY ==="

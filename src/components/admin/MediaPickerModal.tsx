@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { X, Search, Check, ImageIcon, RefreshCw, Folder } from "lucide-react";
+import { X, Search, Check, ImageIcon, RefreshCw } from "lucide-react";
 
 interface MediaItem {
   id: string;
@@ -31,30 +31,35 @@ export default function MediaPickerModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFolder, setActiveFolder] = useState<"ALL" | "portfolio" | "hero">("ALL");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState<string>(currentUrl || "");
+  const [userSelectedUrl, setUserSelectedUrl] = useState<string | null>(null);
   const [customUrlInput, setCustomUrlInput] = useState("");
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchMedia();
-      setSelectedUrl(currentUrl || "");
-    }
-  }, [isOpen, currentUrl]);
+  const selectedUrl = userSelectedUrl !== null ? userSelectedUrl : (currentUrl || "");
 
-  const fetchMedia = async () => {
+  const fetchMedia = useCallback(() => {
     setIsLoading(true);
-    try {
-      const res = await fetch("/api/admin/media");
-      const data = await res.json();
-      if (data.success && Array.isArray(data.data)) {
-        setMediaList(data.data);
-      }
-    } catch (err) {
-      console.error("Gagal memuat daftar media:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    fetch("/api/admin/media")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data)) {
+          setMediaList(data.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Gagal memuat daftar media:", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const timer = setTimeout(() => {
+      fetchMedia();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [isOpen, fetchMedia]);
 
   if (!isOpen) return null;
 
@@ -174,7 +179,7 @@ export default function MediaPickerModal({
                   <div
                     key={item.id}
                     onClick={() => {
-                      setSelectedUrl(item.url);
+                      setUserSelectedUrl(item.url);
                       setCustomUrlInput("");
                     }}
                     className={`group relative aspect-square rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${
@@ -227,7 +232,7 @@ export default function MediaPickerModal({
               value={customUrlInput || selectedUrl}
               onChange={(e) => {
                 setCustomUrlInput(e.target.value);
-                setSelectedUrl(e.target.value);
+                setUserSelectedUrl(e.target.value);
               }}
               className="w-full bg-[#0b1626] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#d0a526]"
             />

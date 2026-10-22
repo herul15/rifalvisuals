@@ -23,6 +23,10 @@
 # misc
 .DS_Store
 *.pem
+*.zip
+*.tar.gz
+next-build.zip
+deploy.tar.gz
 
 # debug
 npm-debug.log*

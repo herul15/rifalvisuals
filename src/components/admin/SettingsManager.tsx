@@ -8,13 +8,10 @@ import {
   AlertCircle,
   X,
   Phone,
-  Mail,
   MapPin,
   Building,
-  Percent,
   Megaphone,
   Camera,
-  ImageIcon,
 } from "lucide-react";
 import MediaPickerModal from "@/components/admin/MediaPickerModal";
 
