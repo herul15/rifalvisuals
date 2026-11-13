@@ -8,7 +8,8 @@ import { Lock, User, ArrowLeft, Loader2, AlertCircle } from "lucide-react";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const redirectPath = searchParams.get("from") || "/admin/dashboard";
+  const requestedPath = searchParams.get("from") || "";
+  const redirectPath = /^\/admin(?:\/|$)/.test(requestedPath) && !requestedPath.startsWith("/admin/login") && !/[\\\r\n]/.test(requestedPath) ? requestedPath : "/admin/dashboard";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -43,10 +44,6 @@ function LoginForm() {
     }
   };
 
-  const handleFillDemo = () => {
-    setUsername("admin");
-    setPassword("AdminRifal2026!");
-  };
 
   return (
     <div className="bg-[#0f1d30] py-8 px-6 sm:px-10 shadow-2xl rounded-2xl border border-white/10">
@@ -126,21 +123,6 @@ function LoginForm() {
           </button>
         </div>
       </form>
-
-      {/* Quick Demo Credentials Info */}
-      <div className="mt-8 pt-6 border-t border-white/10 text-center">
-        <p className="text-xs text-slate-400 mb-2">
-          Kredensial bawaan seeding: <code className="text-[#d0a526]">admin</code> /{" "}
-          <code className="text-[#d0a526]">AdminRifal2026!</code>
-        </p>
-        <button
-          type="button"
-          onClick={handleFillDemo}
-          className="text-xs font-semibold text-[#d0a526] hover:underline"
-        >
-          Isi otomatis kredensial bawaan
-        </button>
-      </div>
     </div>
   );
 }

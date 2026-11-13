@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword, signSessionToken } from "@/lib/auth";
+import { readBody, apiErrorResponse, ApiError } from "@/lib/api";
+import { loginSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await readBody(request, loginSchema);
     const { username, password } = body;
 
     if (!username || !password) {
@@ -36,6 +38,8 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!["ADMIN", "SUPER_ADMIN"].includes(admin.role)) throw new ApiError(403, "Akses admin diperlukan.");
+
     // Sign session token (7 days)
     const token = signSessionToken({
       userId: admin.id,
@@ -64,10 +68,6 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
-    return NextResponse.json(
-      { success: false, error: "Terjadi kesalahan internal pada server." },
-      { status: 500 }
-    );
+    return apiErrorResponse(error);
   }
 }

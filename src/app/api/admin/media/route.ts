@@ -1,21 +1,12 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import fs from "fs";
 import path from "path";
-import { verifySessionToken } from "@/lib/auth";
+import { requireApiAdmin } from "@/lib/admin-session";
+import { apiErrorResponse } from "@/lib/api";
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("rifal_admin_session")?.value;
-    const session = sessionCookie ? verifySessionToken(sessionCookie) : null;
-
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: "Akses ditolak. Sesi admin tidak valid." },
-        { status: 401 }
-      );
-    }
+    await requireApiAdmin();
 
     const portfolioDir = path.join(process.cwd(), "public", "images", "portfolio");
     const heroDir = path.join(process.cwd(), "public", "images", "hero");
@@ -66,10 +57,6 @@ export async function GET() {
       data: mediaList,
     });
   } catch (error) {
-    console.error("Error reading media directory:", error);
-    return NextResponse.json(
-      { success: false, error: "Gagal membaca direktori aset media." },
-      { status: 500 }
-    );
+    return apiErrorResponse(error);
   }
 }

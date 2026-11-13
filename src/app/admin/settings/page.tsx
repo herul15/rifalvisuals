@@ -1,29 +1,13 @@
+import { requirePageAdmin } from "@/lib/admin-session";
 import React from "react";
-import prisma from "@/lib/prisma";
+import { getSiteSettings } from "@/lib/site-settings";
 import SettingsManager from "@/components/admin/SettingsManager";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
-  const settings = await prisma.siteSetting.upsert({
-    where: { id: "default" },
-    update: {},
-    create: {
-      id: "default",
-      companyName: "Rifalvisuals Indonesia",
-      tagline: "Mengabadikan Perjalanan Ibadah, Menjaga Kenangan Selamanya.",
-      whatsappNumber: "62881080522136",
-      emailAddress: "Rifalvisuals2024@gmail.com",
-      instagramHandle: "rifalvisuals",
-      tiktokHandle: "rifaal_dii",
-      address: "Mekkah - Madinah - Indonesia",
-      meetingPointNabawi: "Pintu 333 / 310 Masjid Nabawi",
-      meetingPointHaram: "WC 3 Pelataran Masjidil Haram",
-      meetingPointJabal: "Lobby Hotel Al Shohada",
-      dpPercentage: 50,
-      announcementText: null,
-    },
-  });
+  await requirePageAdmin();
+  const settings = await getSiteSettings();
 
   return (
     <div className="space-y-6">

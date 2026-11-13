@@ -54,10 +54,10 @@ export default function PortfolioManager({
   // New item form state
   const [newItem, setNewItem] = useState({
     title: "",
-    location: "MEKKAH",
+    location: "MAKKAH",
     mediaUrl: "/images/hero/hero-makkah.jpeg",
     caption: "",
-    clientConsent: true,
+    clientConsent: false,
     isFeatured: false,
   });
 
@@ -175,10 +175,10 @@ export default function PortfolioManager({
       setIsAddModalOpen(false);
       setNewItem({
         title: "",
-        location: "MEKKAH",
+        location: "MAKKAH",
         mediaUrl: "/images/hero/hero-makkah.jpeg",
         caption: "",
-        clientConsent: true,
+        clientConsent: false,
         isFeatured: false,
       });
       showNotification("success", "Foto portofolio baru berhasil ditambahkan.");
@@ -262,7 +262,7 @@ export default function PortfolioManager({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#0f1d30] border border-white/10">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs text-slate-400 mr-2">Filter Lokasi:</span>
-          {["ALL", "MEKKAH", "MADINAH", "JABAL", "AL_ULA"].map((loc) => (
+          {["ALL", "MAKKAH", "MADINAH", "JABAL", "AL_ULA"].map((loc) => (
             <button
               key={loc}
               type="button"
@@ -275,7 +275,7 @@ export default function PortfolioManager({
             >
               {loc === "ALL"
                 ? "Semua"
-                : loc === "MEKKAH"
+                : loc === "MAKKAH"
                 ? "Mekkah"
                 : loc === "MADINAH"
                 ? "Madinah"
@@ -301,6 +301,7 @@ export default function PortfolioManager({
         {filteredItems.map((item) => (
           <div
             key={item.id}
+            data-testid={`portfolio-${item.id}`}
             className={`rounded-2xl overflow-hidden bg-[#0f1d30] border flex flex-col justify-between transition-all group ${
               item.isActive ? "border-white/10" : "border-white/5 opacity-60"
             }`}
@@ -464,7 +465,7 @@ export default function PortfolioManager({
                   }
                   className="w-full bg-[#070e1a] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#d0a526]"
                 >
-                  <option value="MEKKAH">Mekkah (Haram / Thawaf)</option>
+                  <option value="MAKKAH">Mekkah (Haram / Thawaf)</option>
                   <option value="MADINAH">Madinah (Masjid Nabawi / Payung)</option>
                   <option value="JABAL">City Tour Jabal (Khandamah / Kudai)</option>
                   <option value="AL_ULA">Al Ula</option>
@@ -603,7 +604,7 @@ export default function PortfolioManager({
                   }
                   className="w-full bg-[#070e1a] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#d0a526]"
                 >
-                  <option value="MEKKAH">Mekkah (Haram / Thawaf)</option>
+                  <option value="MAKKAH">Mekkah (Haram / Thawaf)</option>
                   <option value="MADINAH">Madinah (Masjid Nabawi / Payung)</option>
                   <option value="JABAL">City Tour Jabal (Khandamah / Kudai)</option>
                   <option value="AL_ULA">Al Ula</option>

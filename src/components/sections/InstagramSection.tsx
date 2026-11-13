@@ -15,39 +15,14 @@ export interface InstagramPostItem {
 
 interface InstagramSectionProps {
   posts?: InstagramPostItem[];
+  instagramHandle?: string;
 }
 
 export default function InstagramSection({
   posts = [],
+  instagramHandle = "rifalvisuals",
 }: InstagramSectionProps) {
-  const defaultPosts: InstagramPostItem[] = [
-    {
-      id: "ig-1",
-      postUrl: "https://www.instagram.com/rifalvisuals",
-      imageUrl: "/images/hero/hero-makkah.jpeg",
-      caption:
-        "Setiap tetes air mata dan doa di hadapan Baitullah layak diabadikan dengan penuh kehormatan.",
-      likeCount: 428,
-    },
-    {
-      id: "ig-2",
-      postUrl: "https://www.instagram.com/rifalvisuals",
-      imageUrl: "/images/hero/hero-nabawi.jpeg",
-      caption:
-        "Ketenangan Masjid Nabawi yang selalu dirindukan setiap jiwa yang pernah berkunjung.",
-      likeCount: 615,
-    },
-    {
-      id: "ig-3",
-      postUrl: "https://www.instagram.com/rifalvisuals",
-      imageUrl: "/images/hero/hero-jabal.jpeg",
-      caption:
-        "Pemandangan kota Mekkah dari bukit Khandamah saat matahari terbenam memancarkan cahaya emas.",
-      likeCount: 890,
-    },
-  ];
-
-  const displayPosts = posts.length > 0 ? posts : defaultPosts;
+  const displayPosts = posts;
 
   return (
     <section className="py-20 bg-[#0b1626] text-white">
@@ -60,7 +35,7 @@ export default function InstagramSection({
               <span>Ikuti Keseharian Kami</span>
             </div>
             <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
-              Instagram @rifalvisuals
+              Instagram @{instagramHandle}
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               Dokumentasi harian, cuplikan Reels terbaru, dan suasana Tanah Suci.
@@ -68,7 +43,7 @@ export default function InstagramSection({
           </div>
 
           <a
-            href="https://www.instagram.com/rifalvisuals"
+            href={`https://www.instagram.com/${instagramHandle}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-colors"
@@ -90,7 +65,7 @@ export default function InstagramSection({
             >
               <Image
                 src={post.imageUrl}
-                alt="Instagram @rifalvisuals feed"
+                alt={`Instagram @${instagramHandle} feed`}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"

@@ -5,11 +5,13 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
-    include: ["tests/unit/**/*.test.ts", "tests/integration/**/*.test.ts"],
+    setupFiles: ["./tests/setup.ts"],
+    fileParallelism: process.env.RIFAL_TEST_MODE !== "integration",
+    include: process.env.RIFAL_TEST_MODE === "integration" ? ["tests/integration/**/*.test.ts"] : ["tests/unit/**/*.test.ts"],
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
 });

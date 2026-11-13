@@ -1,15 +1,18 @@
 import { defineConfig, devices } from "@playwright/test";
 
+if (process.env.RIFAL_TEST_MODE !== "e2e") throw new Error("Use npm run test:e2e so the dedicated test database is configured.");
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
-  reporter: "list",
+  reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: "http://localhost:3000",
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
+    screenshot: "only-on-failure",
   },
   projects: [
     {
@@ -27,7 +30,7 @@ export default defineConfig({
   webServer: {
     command: "npm run start",
     port: 3000,
-    reuseExistingServer: true,
+    reuseExistingServer: false,
     timeout: 120000,
   },
 });

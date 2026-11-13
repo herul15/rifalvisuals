@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { readBody } from "@/lib/api";
+import { trackingSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await readBody(request, trackingSchema);
     const { packageName, variantLabel, price, location } = body;
 
     // Log the click event to TrackingEvent
@@ -17,7 +19,7 @@ export async function POST(request: Request) {
           location,
           timestamp: new Date().toISOString(),
         }),
-        userAgent: request.headers.get("user-agent") || undefined,
+        userAgent: request.headers.get("user-agent")?.slice(0, 500) || undefined,
       },
     });
 

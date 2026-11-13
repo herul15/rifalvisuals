@@ -121,10 +121,10 @@ export default function SettingsManager({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-companyName">
                 Nama Resmi Perusahaan
               </label>
-              <input
+              <input id="setting-companyName"
                 type="text"
                 required
                 value={settings.companyName}
@@ -136,10 +136,10 @@ export default function SettingsManager({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-tagline">
                 Tagline Utama
               </label>
-              <input
+              <input id="setting-tagline"
                 type="text"
                 required
                 value={settings.tagline}
@@ -161,10 +161,10 @@ export default function SettingsManager({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-whatsappNumber">
                 Nomor WhatsApp Resmi (Format: 628...)
               </label>
-              <input
+              <input id="setting-whatsappNumber"
                 type="text"
                 required
                 value={settings.whatsappNumber}
@@ -179,10 +179,10 @@ export default function SettingsManager({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-emailAddress">
                 Email Operasional
               </label>
-              <input
+              <input id="setting-emailAddress"
                 type="email"
                 required
                 value={settings.emailAddress}
@@ -195,13 +195,13 @@ export default function SettingsManager({
 
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1">
-                Username Instagram
+                <span id="setting-instagram-label">Username Instagram</span>
               </label>
               <div className="flex items-center">
                 <span className="bg-[#070e1a] border border-r-0 border-white/10 rounded-l-xl px-3 py-2 text-xs text-slate-400">
                   @
                 </span>
-                <input
+                <input id="setting-instagramHandle" aria-labelledby="setting-instagram-label"
                   type="text"
                   value={settings.instagramHandle}
                   onChange={(e) =>
@@ -214,13 +214,13 @@ export default function SettingsManager({
 
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1">
-                Username TikTok
+                <span id="setting-tiktok-label">Username TikTok</span>
               </label>
               <div className="flex items-center">
                 <span className="bg-[#070e1a] border border-r-0 border-white/10 rounded-l-xl px-3 py-2 text-xs text-slate-400">
                   @
                 </span>
-                <input
+                <input id="setting-tiktokHandle" aria-labelledby="setting-tiktok-label"
                   type="text"
                   value={settings.tiktokHandle}
                   onChange={(e) =>
@@ -244,10 +244,10 @@ export default function SettingsManager({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-meetingPointNabawi">
                 Meeting Point Madinah (Nabawi)
               </label>
-              <input
+              <input id="setting-meetingPointNabawi"
                 type="text"
                 required
                 value={settings.meetingPointNabawi}
@@ -259,10 +259,10 @@ export default function SettingsManager({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-meetingPointHaram">
                 Meeting Point Makkah (Haram)
               </label>
-              <input
+              <input id="setting-meetingPointHaram"
                 type="text"
                 required
                 value={settings.meetingPointHaram}
@@ -274,10 +274,10 @@ export default function SettingsManager({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-meetingPointJabal">
                 Meeting Point City Tour Jabal
               </label>
-              <input
+              <input id="setting-meetingPointJabal"
                 type="text"
                 required
                 value={settings.meetingPointJabal}
@@ -290,13 +290,13 @@ export default function SettingsManager({
           </div>
 
           <div className="pt-2">
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-medium text-slate-300 mb-1" htmlFor="setting-dpPercentage">
               Persentase DP Wajib (%)
             </label>
             <div className="w-32">
-              <input
+              <input id="setting-dpPercentage"
                 type="number"
-                min="10"
+                min="0"
                 max="100"
                 value={settings.dpPercentage}
                 onChange={(e) =>
@@ -410,7 +410,7 @@ export default function SettingsManager({
             <label className="block text-xs font-medium text-slate-300 mb-1">
               Teks Pengumuman (Opsional)
             </label>
-            <input
+              <input id="setting-announcementText"
               type="text"
               placeholder="Contoh: Booking musim Umroh Syawal 1447H telah dibuka. Slot terbatas!"
               value={settings.announcementText || ""}

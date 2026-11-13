@@ -1,3 +1,4 @@
+import { getSiteSettings } from "@/lib/site-settings";
 import React from "react";
 import Link from "next/link";
 import {
@@ -14,21 +15,27 @@ import { generateGeneralInquiryUrl } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
+const baseMetadata = {
   title: "Syarat & Ketentuan Pemesanan | Rifalvisuals Indonesia",
   description:
     "Ketentuan resmi pemesanan jasa dokumentasi umroh, titik temu di Mekkah dan Madinah, alur pembayaran, dan kebijakan revisi.",
 };
 
-export default function TermsPage() {
-  const whatsappUrl = generateGeneralInquiryUrl("62881080522136");
+export async function generateMetadata() {
+  const settings = await getSiteSettings();
+  return { ...baseMetadata, title: `Syarat & Ketentuan Pemesanan | ${settings.companyName}` };
+}
+
+export default async function TermsPage() {
+  const settings = await getSiteSettings();
+  const whatsappUrl = generateGeneralInquiryUrl(settings.whatsappNumber);
 
   const sections = [
     {
       icon: CreditCard,
       title: "1. Uang Muka (DP) & Pelunasan",
       items: [
-        "Pemesanan jadwal fotografer dinyatakan sah setelah calon jamaah melakukan pembayaran Uang Muka (DP) sebesar 50% dari total nilai paket.",
+        `Pemesanan jadwal fotografer dinyatakan sah setelah calon jamaah melakukan pembayaran Uang Muka (DP) sebesar ${settings.dpPercentage}% dari total nilai paket.`,
         "Pelunasan sebesar 100% wajib diselesaikan paling lambat H-1 sebelum waktu sesi pemotretan berlangsung.",
         "Pembayaran hanya dilakukan melalui satu rekening resmi perusahaan yang dikonfirmasi langsung oleh admin WhatsApp resmi Rifalvisuals.",
         "Demi keamanan transaksi dan menghindari penipuan, Rifalvisuals tidak pernah meminta transfer ke rekening pribadi pihak ketiga tanpa surat tugas resmi.",
@@ -38,9 +45,9 @@ export default function TermsPage() {
       icon: MapPin,
       title: "2. Titik Temu Resmi (Meeting Point)",
       items: [
-        "Masjid Nabawi (Madinah): Pintu 333 / 310 pelataran Masjid Nabawi.",
-        "Masjidil Haram (Makkah): Area WC 3 pelataran Masjidil Haram.",
-        "Jabal Series (Makkah): Lobby Hotel Al Shohada (kecuali paket Jabal VIP yang menyertakan penjemputan langsung di hotel jamaah).",
+        `Masjid Nabawi (Madinah): ${settings.meetingPointNabawi}.`,
+        `Masjidil Haram (Makkah): ${settings.meetingPointHaram}.`,
+        `Jabal Series (Makkah): ${settings.meetingPointJabal} (kecuali paket Jabal VIP yang menyertakan penjemputan langsung di hotel jamaah).`,
         "Jamaah diharapkan hadir tepat waktu di titik temu sesuai jam yang telah dikonfirmasi bersama admin untuk memaksimalkan durasi hunting foto.",
       ],
     },
@@ -67,7 +74,7 @@ export default function TermsPage() {
       title: "5. Kebijakan Privasi Jamaah & Hak Publikasi",
       items: [
         "Rifalvisuals Indonesia sangat menghormati privasi dan kehormatan setiap jamaah di Tanah Suci.",
-        "Foto atau video yang menampilkan wajah jamaah hanya akan dipublikasikan pada portofolio situs web atau akun media sosial resmi (@rifalvisuals) apabila telah mendapatkan izin dan persetujuan (consent) dari pelanggan.",
+        `Foto atau video yang menampilkan wajah jamaah hanya akan dipublikasikan pada portofolio situs web atau akun media sosial resmi (@${settings.instagramHandle}) apabila telah mendapatkan izin dan persetujuan (consent) dari pelanggan.`,
         "Jamaah berhak menolak publikasi karyanya ke ranah publik tanpa dikenakan biaya penalti apa pun.",
       ],
     },

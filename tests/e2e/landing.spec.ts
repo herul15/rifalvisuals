@@ -18,7 +18,7 @@ test.describe("Landing Page & Core User Flows", () => {
     await expect(pricingSection).toBeVisible();
 
     // Verify official price is rendered
-    await expect(page.getByText("Rp2.020.500")).toBeVisible();
+    await expect(page.getByTestId("package-kabah-pelataran").getByText("Rp2.020.500")).toBeVisible();
   });
 
   test("contains contextual WhatsApp CTAs with official number 62881080522136", async ({ page }) => {

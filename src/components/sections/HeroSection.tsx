@@ -8,14 +8,21 @@ import { generateGeneralInquiryUrl } from "@/lib/whatsapp";
 interface HeroSectionProps {
   whatsappNumber?: string;
   heroImageUrl?: string | null;
+  tagline?: string;
+  announcementText?: string | null;
 }
 
 export default function HeroSection({
   whatsappNumber = "62881080522136",
   heroImageUrl = "/images/hero/hero-makkah.jpeg",
+  tagline = "Mengabadikan Perjalanan Ibadah, Menjaga Kenangan Selamanya.",
+  announcementText,
 }: HeroSectionProps) {
   const generalWhatsAppUrl = generateGeneralInquiryUrl(whatsappNumber);
   const bgImage = heroImageUrl || "/images/hero/hero-makkah.jpeg";
+  const separator = tagline.indexOf(",");
+  const headline = separator < 0 ? tagline : tagline.slice(0, separator + 1);
+  const closing = separator < 0 ? "" : tagline.slice(separator + 1).trim();
 
   return (
     <section
@@ -46,11 +53,10 @@ export default function HeroSection({
 
         {/* Cinematic Display Headline */}
         <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white max-w-4xl leading-[1.15] mb-6 drop-shadow-sm">
-          Mengabadikan Perjalanan Ibadah,{" "}
-          <span className="gold-gradient-text block sm:inline">
-            Menjaga Kenangan Selamanya.
-          </span>
+          {headline}{closing && <> <span className="gold-gradient-text block sm:inline">{closing}</span></>}
         </h1>
+
+        {announcementText && <p className="mb-6 rounded-xl bg-white/10 px-4 py-3 text-sm text-amber-100">{announcementText}</p>}
 
         {/* Crisp Value Proposition Subtext (Under 25 words) */}
         <p className="font-body text-base sm:text-lg lg:text-xl text-slate-300 max-w-2xl leading-relaxed mb-8">

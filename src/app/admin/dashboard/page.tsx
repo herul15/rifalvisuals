@@ -1,3 +1,4 @@
+import { requirePageAdmin } from "@/lib/admin-session";
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -15,6 +16,7 @@ import { formatRupiah } from "@/lib/whatsapp";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
+  await requirePageAdmin();
   const [
     packageCount,
     portfolioCount,

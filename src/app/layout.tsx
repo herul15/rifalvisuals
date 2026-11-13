@@ -1,23 +1,27 @@
+import { getSiteSettings } from "@/lib/site-settings";
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+// Branding is read at request time, including login and error pages.
+export const dynamic = "force-dynamic";
+
+const playfair = localFont({
+  src: "./fonts/playfair-display.woff2",
   variable: "--font-playfair",
-  subsets: ["latin"],
   display: "swap",
-  weight: ["500", "600", "700", "800"],
+  weight: "400 900",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
+const plusJakarta = localFont({
+  src: "./fonts/plus-jakarta-sans.woff2",
   variable: "--font-plus-jakarta",
-  subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: "200 800",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://rifalvisuals.id"),
+const baseMetadata: Metadata = {
+  metadataBase: new URL("https://rifalvisuals.com"),
   title: "Rifalvisuals Indonesia | Jasa Dokumentasi Umroh & Haji Profesional",
   description:
     "Mengabadikan perjalanan ibadah di Mekkah, Madinah, Thaif, dan Al Ula dengan visual sinematik, amanah, dan terpercaya. Pricelist resmi dan booking langsung via WhatsApp.",
@@ -54,6 +58,16 @@ export const metadata: Metadata = {
     ],
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const title = settings.companyName + " | Jasa Dokumentasi Umroh & Haji Profesional";
+  return { ...baseMetadata, title, description: settings.tagline,
+    authors: [{ name: settings.companyName }], creator: settings.companyName,
+    openGraph: { ...baseMetadata.openGraph, title, description: settings.tagline, siteName: settings.companyName,
+      images: [{ url: settings.heroImageUrl || "/images/hero/hero-makkah.jpeg", alt: settings.companyName }] },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#1e3a5f",

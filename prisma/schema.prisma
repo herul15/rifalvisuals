@@ -95,7 +95,7 @@ model Portfolio {
   mediaUrl      String
   thumbnailUrl  String?
   caption       String?
-  clientConsent Boolean  @default(true)
+  clientConsent Boolean  @default(false)
   isFeatured    Boolean  @default(false)
   isActive      Boolean  @default(true)
   sortOrder     Int      @default(0)
@@ -113,7 +113,7 @@ model Testimonial {
   rating       Int      @default(5)
   comment      String
   date         DateTime @default(now())
-  consentGiven Boolean  @default(true)
+  consentGiven Boolean  @default(false)
   isApproved   Boolean  @default(true)
   avatarUrl    String?
   createdAt    DateTime @default(now())

@@ -15,10 +15,18 @@ import { generateGeneralInquiryUrl } from "@/lib/whatsapp";
 
 interface BookingFlowSectionProps {
   whatsappNumber?: string;
+  dpPercentage?: number;
+  meetingPointNabawi?: string;
+  meetingPointHaram?: string;
+  meetingPointJabal?: string;
 }
 
 export default function BookingFlowSection({
   whatsappNumber = "62881080522136",
+  dpPercentage = 50,
+  meetingPointNabawi = "Pintu 333 / 310 Masjid Nabawi",
+  meetingPointHaram = "WC 3 Pelataran Masjidil Haram",
+  meetingPointJabal = "Lobby Hotel Al Shohada",
 }: BookingFlowSectionProps) {
   const generalWhatsAppUrl = generateGeneralInquiryUrl(whatsappNumber);
 
@@ -38,8 +46,8 @@ export default function BookingFlowSection({
     {
       step: "03",
       icon: CreditCard,
-      title: "Uang Muka (DP) 50%",
-      desc: "Kunci tanggal dan jam sesi pemotretan Anda dengan DP 50% melalui rekening resmi yang diverifikasi admin.",
+      title: `Uang Muka (DP) ${dpPercentage}%`,
+      desc: `Kunci tanggal dan jam sesi pemotretan Anda dengan DP ${dpPercentage}% melalui rekening resmi yang diverifikasi admin.`,
     },
     {
       step: "04",
@@ -114,7 +122,7 @@ export default function BookingFlowSection({
               </div>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
                 Titik temu resmi telah disesuaikan agar mudah dijangkau jamaah:
-                Pintu 333/310 (Nabawi), WC 3 (Haram), dan Hotel Al Shohada (Jabal).
+                {meetingPointNabawi} (Nabawi), {meetingPointHaram} (Haram), dan {meetingPointJabal} (Jabal).
                 Baca rincian ketentuan lengkap mengenai DP, revisi, dan masa simpan file.
               </p>
             </div>

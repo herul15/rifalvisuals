@@ -1,3 +1,4 @@
+import { requirePageAdmin } from "@/lib/admin-session";
 import React from "react";
 import prisma from "@/lib/prisma";
 import PortfolioManager from "@/components/admin/PortfolioManager";
@@ -5,6 +6,7 @@ import PortfolioManager from "@/components/admin/PortfolioManager";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPortfolioPage() {
+  await requirePageAdmin();
   const items = await prisma.portfolio.findMany({
     orderBy: { createdAt: "desc" },
   });

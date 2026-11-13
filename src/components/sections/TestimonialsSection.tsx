@@ -19,37 +19,7 @@ interface TestimonialsSectionProps {
 export default function TestimonialsSection({
   testimonials = [],
 }: TestimonialsSectionProps) {
-  const defaultTestimonials: TestimonialItem[] = [
-    {
-      id: "t1",
-      clientName: "Hj. Siti Rahmawati & Suami",
-      originCity: "Jakarta Selatan",
-      packageTaken: "Paket Ka'bah & Pelataran (Berdua)",
-      rating: 5,
-      comment:
-        "Alhamdulillah, hasil foto dan video dari Mas Rifal luar biasa bagus. Kami tidak merasa terganggu saat tawaf, fotografernya sangat santun, menghargai waktu sholat, dan paham momen-momen sakral yang penuh haru.",
-    },
-    {
-      id: "t2",
-      clientName: "Bpk. Hendra Wijaya & Keluarga",
-      originCity: "Surabaya",
-      packageTaken: "Dokumentasi Masjid Nabawi (Keluarga)",
-      rating: 5,
-      comment:
-        "Membawa orang tua lansia dan anak-anak biasanya sangat repot kalau mau foto sendiri. Bersama Rifalvisuals semuanya rapi, fotografer sabar sekali menuntun langkah kami di pintu 333, dan file drive sudah kami terima lengkap dalam 2 hari.",
-    },
-    {
-      id: "t3",
-      clientName: "Ustadz Ahmad Fauzan",
-      originCity: "Bandung",
-      packageTaken: "Jabal Khandamah Series",
-      rating: 5,
-      comment:
-        "Sudut pengambilan gambar di bukit Khandamah sangat estetik dan berkelas. Sangat amanah dan komunikatif sejak awal konsultasi WhatsApp sampai penyerahan video Reels. Berkah selalu untuk tim Rifalvisuals.",
-    },
-  ];
-
-  const items = testimonials.length > 0 ? testimonials : defaultTestimonials;
+  const items = testimonials;
 
   return (
     <section id="testimonials" className="py-20 lg:py-28 bg-[#f8f7f3] text-[#0f172a]">
@@ -68,6 +38,7 @@ export default function TestimonialsSection({
           </p>
         </div>
 
+        {items.length === 0 && <p className="text-center text-slate-500">Belum ada testimoni yang dipublikasikan.</p>}
         {/* Testimonials 3 Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {items.map((item) => (

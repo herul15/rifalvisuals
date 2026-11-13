@@ -7,11 +7,12 @@ export async function GET() {
       orderBy: { sortOrder: "asc" },
       include: {
         packages: {
-          where: { isActive: true },
+          where: { isActive: true, deletedAt: null },
           orderBy: { sortOrder: "asc" },
           include: {
             variants: {
               where: { isActive: true },
+              orderBy: { price: "asc" },
             },
           },
         },

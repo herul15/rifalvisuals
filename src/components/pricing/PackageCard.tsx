@@ -33,7 +33,7 @@ interface PackageCardProps {
   locationName: string;
   selectedParticipantFilter?: string; // "ALL", "SENDIRI", "BERDUA", "KELUARGA"
   whatsappNumber: string;
-  onOpenAddOns: (packageName: string) => void;
+  onOpenAddOns: () => void;
   selectedAddOns?: string[];
 }
 
@@ -53,10 +53,9 @@ export default function PackageCard({
 
   // Derive active variant: prioritized by filter if specific, otherwise user override, otherwise best seller/first
   const activeVariant =
-    (selectedParticipantFilter !== "ALL"
+    selectedParticipantFilter !== "ALL"
       ? availableVariants.find((v) => v.participantType === selectedParticipantFilter)
-      : null) ||
-    availableVariants.find((v) => v.id === selectedVariantId) ||
+      : availableVariants.find((v) => v.id === selectedVariantId) ||
     availableVariants.find((v) => v.isBestSeller) ||
     availableVariants[0];
 
@@ -75,7 +74,7 @@ export default function PackageCard({
   const handleBookingClick = () => {
     // Record analytics in background
     try {
-      fetch("/api/analytics/whatsapp-click", {
+      void fetch("/api/analytics/whatsapp-click", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -84,7 +83,8 @@ export default function PackageCard({
           price: activeVariant.price,
           location: locationName,
         }),
-      });
+        keepalive: true,
+      }).catch(() => { /* Analytics must never block consultation. */ });
     } catch {
       // Ignore background analytics error
     }
@@ -131,6 +131,7 @@ const getPackageThumbnail = (slug: string, loc: string) => {
 
   return (
     <div
+      data-testid={`package-${pkg.slug}`}
       className={`relative rounded-2xl bg-white border flex flex-col justify-between transition-all duration-300 hover:shadow-xl overflow-hidden ${
         isCardBestSeller
           ? "border-[#d0a526] shadow-md shadow-[#d0a526]/10 ring-1 ring-[#d0a526]/30"
@@ -179,7 +180,7 @@ const getPackageThumbnail = (slug: string, loc: string) => {
         </div>
 
         {/* Variant Participant Selector Pills (if package has multiple variants) */}
-        {availableVariants.length > 1 && (
+        {availableVariants.length > 1 && selectedParticipantFilter === "ALL" && (
           <div className="mb-6">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">
               Pilihan Peserta:
@@ -274,7 +275,7 @@ const getPackageThumbnail = (slug: string, loc: string) => {
 
         <button
           type="button"
-          onClick={() => onOpenAddOns(pkg.name)}
+          onClick={onOpenAddOns}
           className="w-full inline-flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-50 rounded-lg transition-colors"
         >
           <Plus className="w-3.5 h-3.5" />

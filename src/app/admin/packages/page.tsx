@@ -1,3 +1,4 @@
+import { requirePageAdmin } from "@/lib/admin-session";
 import React from "react";
 import prisma from "@/lib/prisma";
 import PackagesManager from "@/components/admin/PackagesManager";
@@ -5,6 +6,7 @@ import PackagesManager from "@/components/admin/PackagesManager";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPackagesPage() {
+  await requirePageAdmin();
   const packages = await prisma.package.findMany({
     orderBy: { sortOrder: "asc" },
     include: {

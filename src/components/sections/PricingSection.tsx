@@ -18,12 +18,14 @@ interface PricingSectionProps {
   categories: CategoryData[];
   addOns: AddOnItem[];
   whatsappNumber?: string;
+  dpPercentage?: number;
 }
 
 export default function PricingSection({
   categories,
   addOns,
   whatsappNumber = "62881080522136",
+  dpPercentage = 50,
 }: PricingSectionProps) {
   // Active Category Slug
   const [activeCategorySlug, setActiveCategorySlug] = useState<string>(
@@ -35,16 +37,20 @@ export default function PricingSection({
 
   // AddOn Modal State
   const [isAddOnModalOpen, setIsAddOnModalOpen] = useState(false);
-  const [selectedAddOnSlugs, setSelectedAddOnSlugs] = useState<string[]>([]);
+  const [addOnPackageId, setAddOnPackageId] = useState<string | null>(null);
+  const [selectedAddOnsByPackage, setSelectedAddOnsByPackage] = useState<Record<string, string[]>>({});
+  const selectedAddOnSlugs = addOnPackageId ? selectedAddOnsByPackage[addOnPackageId] ?? [] : [];
 
   // Find currently active category
   const activeCategory =
     categories.find((c) => c.slug === activeCategorySlug) || categories[0];
 
   const handleToggleAddOn = (slug: string) => {
-    setSelectedAddOnSlugs((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
-    );
+    if (!addOnPackageId) return;
+    setSelectedAddOnsByPackage(prev => {
+      const current = prev[addOnPackageId] ?? [];
+      return { ...prev, [addOnPackageId]: current.includes(slug) ? current.filter(s => s !== slug) : [...current, slug] };
+    });
   };
 
   // Participant filter options
@@ -82,6 +88,9 @@ export default function PricingSection({
                 type="button"
                 onClick={() => {
                   setActiveCategorySlug(cat.slug);
+                  setSelectedAddOnsByPackage({});
+                  setAddOnPackageId(null);
+                  setIsAddOnModalOpen(false);
                 }}
                 className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
                   isActive
@@ -102,7 +111,7 @@ export default function PricingSection({
 
         {/* Participant Type Filter Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          <div className="inline-flex items-center gap-1.5 p-1 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div className="inline-flex flex-wrap justify-center items-center gap-1.5 p-1 rounded-xl bg-white border border-slate-200 shadow-sm max-w-full">
             <span className="text-xs text-slate-400 px-2 hidden sm:inline flex items-center gap-1">
               <Users className="w-3.5 h-3.5" />
               <span>Filter Peserta:</span>
@@ -137,15 +146,18 @@ export default function PricingSection({
 
         {/* Package Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-          {activeCategory?.packages.map((pkg) => (
+          {activeCategory?.packages.filter(pkg => participantFilter === "ALL" || pkg.variants.some(v => v.participantType === participantFilter)).map((pkg) => (
             <PackageCard
               key={pkg.id}
               pkg={pkg}
               locationName={activeCategory.name}
               selectedParticipantFilter={participantFilter}
               whatsappNumber={whatsappNumber}
-              onOpenAddOns={() => setIsAddOnModalOpen(true)}
-              selectedAddOns={selectedAddOnSlugs}
+              onOpenAddOns={() => { setAddOnPackageId(pkg.id); setIsAddOnModalOpen(true); }}
+              selectedAddOns={addOns.filter(addon =>
+                (selectedAddOnsByPackage[pkg.id] ?? []).includes(addon.slug) &&
+                addon.applicableLocations.split(",").map(l => l.trim()).some(l => l === "ALL" || l === activeCategory.location)
+              ).map(addon => addon.name)}
             />
           ))}
         </div>
@@ -153,7 +165,7 @@ export default function PricingSection({
         {/* Bottom Booking Notice */}
         <div className="mt-16 text-center max-w-xl mx-auto">
           <p className="text-xs text-slate-500 leading-relaxed">
-            * Seluruh harga dalam Rupiah resmi. Uang muka (DP) 50% untuk penguncian
+            * Seluruh harga dalam Rupiah resmi. Uang muka (DP) {dpPercentage}% untuk penguncian
             jadwal fotografer dan pelunasan 100% maksimal H-1 sesi pemotretan.
           </p>
         </div>

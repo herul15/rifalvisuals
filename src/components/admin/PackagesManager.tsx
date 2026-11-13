@@ -236,6 +236,7 @@ export default function PackagesManager({
         {packages.map((pkg) => (
           <div
             key={pkg.id}
+            data-testid={`admin-package-${pkg.slug}`}
             className={`p-6 rounded-2xl bg-[#0f1d30] border transition-all ${
               pkg.isActive ? "border-white/10" : "border-red-500/20 opacity-75"
             }`}
@@ -432,8 +433,9 @@ export default function PackagesManager({
                   <input
                     id="newPrice"
                     type="number"
-                    step="500"
-                    min="100000"
+                    step="1"
+                    min="0"
+                    max="2147483647"
                     required
                     value={editingVariant.newPrice}
                     onChange={(e) =>

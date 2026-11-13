@@ -16,11 +16,21 @@ import { generateGeneralInquiryUrl } from "@/lib/whatsapp";
 interface FooterProps {
   whatsappNumber?: string;
   emailAddress?: string;
+  companyName?: string;
+  tagline?: string;
+  address?: string;
+  instagramHandle?: string;
+  tiktokHandle?: string;
 }
 
 export default function Footer({
   whatsappNumber = "62881080522136",
   emailAddress = "Rifalvisuals2024@gmail.com",
+  companyName = "Rifalvisuals Indonesia",
+  tagline = "Mengabadikan Perjalanan Ibadah, Menjaga Kenangan Selamanya.",
+  address = "Mekkah - Madinah - Indonesia",
+  instagramHandle = "rifalvisuals",
+  tiktokHandle = "rifaal_dii",
 }: FooterProps) {
   const whatsappUrl = generateGeneralInquiryUrl(whatsappNumber);
 
@@ -46,16 +56,16 @@ export default function Footer({
               </div>
               <div className="flex flex-col">
                 <span className="font-display text-xl font-bold text-white tracking-tight">
-                  RIFALVISUALS
+                  {companyName}
                 </span>
                 <span className="text-[10px] text-[#d0a526] uppercase tracking-wider">
-                  Rifalvisuals Indonesia
+                  {companyName}
                 </span>
               </div>
             </div>
 
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
-              &ldquo;Mengabadikan Perjalanan Ibadah, Menjaga Kenangan Selamanya.&rdquo;
+              &ldquo;{tagline}&rdquo;{" "}
               Penyedia jasa dokumentasi profesional resmi Umroh dan Haji di Tanah Suci.
             </p>
 
@@ -115,7 +125,7 @@ export default function Footer({
             <ul className="space-y-3 text-xs sm:text-sm text-slate-400">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#d0a526] mt-0.5 flex-shrink-0" />
-                <span>Area Layanan: Mekkah, Madinah, Thaif, dan Al Ula</span>
+                <span>{address}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#d0a526] flex-shrink-0" />
@@ -125,7 +135,7 @@ export default function Footer({
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  +62 881-0805-22136 (WhatsApp Resmi)
+                  +{whatsappNumber} (WhatsApp Resmi)
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
@@ -140,14 +150,15 @@ export default function Footer({
               <li className="flex items-center gap-2.5">
                 <InstagramIcon className="w-4 h-4 text-[#d0a526] flex-shrink-0" />
                 <a
-                  href="https://www.instagram.com/rifalvisuals"
+                  href={`https://www.instagram.com/${instagramHandle}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  @rifalvisuals
+                  @{instagramHandle}
                 </a>
               </li>
+              <li><a href={`https://www.tiktok.com/@${tiktokHandle}`} target="_blank" rel="noopener noreferrer" className="hover:text-white">TikTok @{tiktokHandle}</a></li>
             </ul>
           </div>
         </div>
@@ -155,7 +166,7 @@ export default function Footer({
         {/* Bottom Bar: Copyright & Back to Top */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p className="text-center sm:text-left">
-            © 2024-2026 Rifalvisuals Indonesia. Seluruh hak cipta dilindungi
+            © 2024-{new Date().getFullYear()} {companyName}. Seluruh hak cipta dilindungi
             undang-undang.
           </p>
 

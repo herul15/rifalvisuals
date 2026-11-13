@@ -1,3 +1,4 @@
+import { getSiteSettings } from "@/lib/site-settings";
 import React from "react";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/layout/Navbar";
@@ -16,31 +17,7 @@ import WhatsAppFloating from "@/components/layout/WhatsAppFloating";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // 1. Fetch site settings
-  let siteSetting = await prisma.siteSetting.findUnique({
-    where: { id: "default" },
-  });
-
-  if (!siteSetting) {
-    siteSetting = {
-      id: "default",
-      companyName: "Rifalvisuals Indonesia",
-      tagline: "Mengabadikan Perjalanan Ibadah, Menjaga Kenangan Selamanya.",
-      whatsappNumber: "62881080522136",
-      emailAddress: "Rifalvisuals2024@gmail.com",
-      instagramHandle: "rifalvisuals",
-      tiktokHandle: "rifaal_dii",
-      address: "Mekkah, Madinah, Arab Saudi & Indonesia",
-      meetingPointNabawi: "Pintu 333 / 310 Masjid Nabawi",
-      meetingPointHaram: "WC 3 Pelataran Masjidil Haram",
-      meetingPointJabal: "Lobby Hotel Al Shohada",
-      dpPercentage: 50,
-      announcementText: null,
-      heroImageUrl: "/images/hero/hero-makkah.jpeg",
-      aboutImageUrl: "/images/hero/about-rifal.jpeg",
-      updatedAt: new Date(),
-    };
-  }
+  const siteSetting = await getSiteSettings();
 
   const whatsappNumber = siteSetting.whatsappNumber || "62881080522136";
 
@@ -49,11 +26,12 @@ export default async function HomePage() {
     orderBy: { sortOrder: "asc" },
     include: {
       packages: {
-        where: { isActive: true },
+        where: { isActive: true, deletedAt: null },
         orderBy: { sortOrder: "asc" },
         include: {
           variants: {
             where: { isActive: true },
+            orderBy: { price: "asc" },
           },
         },
       },
@@ -150,12 +128,14 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen flex flex-col bg-[#fbfbf9]">
       {/* Navigation */}
-      <Navbar whatsappNumber={whatsappNumber} />
+      <Navbar whatsappNumber={whatsappNumber} companyName={siteSetting.companyName} />
 
       {/* Hero Section */}
       <HeroSection
         whatsappNumber={whatsappNumber}
         heroImageUrl={siteSetting.heroImageUrl}
+        tagline={siteSetting.tagline}
+        announcementText={siteSetting.announcementText}
       />
 
       {/* About Company & Core Values */}
@@ -169,19 +149,22 @@ export default async function HomePage() {
         categories={categories}
         addOns={addOns}
         whatsappNumber={whatsappNumber}
+        dpPercentage={siteSetting.dpPercentage}
       />
 
       {/* Real Portfolio Gallery */}
       <PortfolioSection initialItems={portfolioItems} />
 
       {/* Transparent Booking Journey */}
-      <BookingFlowSection whatsappNumber={whatsappNumber} />
+      <BookingFlowSection whatsappNumber={whatsappNumber} dpPercentage={siteSetting.dpPercentage}
+        meetingPointNabawi={siteSetting.meetingPointNabawi} meetingPointHaram={siteSetting.meetingPointHaram}
+        meetingPointJabal={siteSetting.meetingPointJabal} />
 
       {/* Verified Pilgrim Testimonials */}
       <TestimonialsSection testimonials={testimonials} />
 
       {/* Instagram Feed / Fallback */}
-      <InstagramSection posts={instagramPosts} />
+      <InstagramSection posts={instagramPosts} instagramHandle={siteSetting.instagramHandle} />
 
       {/* Specific Umroh FAQ */}
       <FaqSection whatsappNumber={whatsappNumber} />
@@ -190,6 +173,11 @@ export default async function HomePage() {
       <Footer
         whatsappNumber={whatsappNumber}
         emailAddress={siteSetting.emailAddress}
+        companyName={siteSetting.companyName}
+        tagline={siteSetting.tagline}
+        address={siteSetting.address}
+        instagramHandle={siteSetting.instagramHandle}
+        tiktokHandle={siteSetting.tiktokHandle}
       />
 
       {/* Floating WhatsApp CTA */}

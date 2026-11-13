@@ -8,10 +8,12 @@ import { generateGeneralInquiryUrl } from "@/lib/whatsapp";
 
 interface NavbarProps {
   whatsappNumber?: string;
+  companyName?: string;
 }
 
 export default function Navbar({
   whatsappNumber = "62881080522136",
+  companyName = "Rifalvisuals Indonesia",
 }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -74,7 +76,7 @@ export default function Navbar({
             </div>
             <div className="flex flex-col">
               <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-[#d0a526] transition-colors">
-                RIFALVISUALS
+                {companyName}
               </span>
               <span className="text-[10px] sm:text-xs text-[#cbd5e1] tracking-wider uppercase">
                 Dokumentasi Umroh & Haji
@@ -157,7 +159,7 @@ export default function Navbar({
               </a>
 
               <p className="text-center text-xs text-slate-400">
-                Rifalvisuals Indonesia · Mekkah & Madinah
+                {companyName} · Mekkah & Madinah
               </p>
             </div>
           </div>

@@ -12,102 +12,14 @@ interface PortfolioSectionProps {
 export default function PortfolioSection({
   initialItems = [],
 }: PortfolioSectionProps) {
-  // Built-in curated authentic photos from Tanah Suci
-  const defaultItems: GalleryItem[] = [
-    {
-      id: "p1",
-      title: "Khidmat di Hadapan Ka'bah",
-      location: "MEKKAH",
-      mediaUrl: "/images/hero/hero-makkah.jpeg",
-      caption: "Momen kekhidmatan jamaah dalam melantunkan munajat di hadapan Baitullah.",
-    },
-    {
-      id: "p2",
-      title: "Kesejukan Masjid Nabawi",
-      location: "MADINAH",
-      mediaUrl: "/images/hero/hero-nabawi.jpeg",
-      caption: "Pelataran luas berpayung megah dengan pencahayaan fajar yang menenteramkan.",
-    },
-    {
-      id: "p3",
-      title: "Panorama Jabal Khandamah",
-      location: "JABAL",
-      mediaUrl: "/images/hero/hero-jabal.jpeg",
-      caption: "Pemandangan magis kota suci Mekkah dari ketinggian puncak Khandamah.",
-    },
-    {
-      id: "p4",
-      title: "Kehangatan Ibadah Jamaah",
-      location: "MEKKAH",
-      mediaUrl: "/images/hero/about-rifal.jpeg",
-      caption: "Mendampingi langkah ibadah jamaah tercinta tanpa rasa lelah.",
-    },
-    {
-      id: "p5",
-      title: "Sudut Megah Menara Jam",
-      location: "MEKKAH",
-      mediaUrl: "/images/portfolio/IMG_2103.jpeg",
-      caption: "Kemegahan arsitektur modern berpadu kesucian tempat ibadah.",
-    },
-    {
-      id: "p6",
-      title: "Ketenangan Gerbang Nabawi",
-      location: "MADINAH",
-      mediaUrl: "/images/portfolio/IMG_4841.jpeg",
-      caption: "Keagungan pintu Masjid Nabawi dan langkah lembut para peziarah makam Rasulullah SAW.",
-    },
-    {
-      id: "p7",
-      title: "Tawaf Syahdu Pelataran Ka'bah",
-      location: "MEKKAH",
-      mediaUrl: "/images/portfolio/IMG_1951.jpeg",
-      caption: "Sudut pengambilan candid jamaah saat bertawaf mengelilingi Ka'bah yang mulia.",
-    },
-    {
-      id: "p8",
-      title: "Panorama Perbukitan Kudai",
-      location: "JABAL",
-      mediaUrl: "/images/portfolio/IMG_1339.jpeg",
-      caption: "Sesi dokumentasi santai dengan latar belakang lanskap perbukitan kota suci.",
-    },
-    {
-      id: "p9",
-      title: "Arsitektur Megah Masjidil Haram",
-      location: "MEKKAH",
-      mediaUrl: "/images/portfolio/IMG_3562.jpeg",
-      caption: "Detail pilar-pilar agung dan kemilau marmer putih Masjidil Haram.",
-    },
-    {
-      id: "p10",
-      title: "Pelataran Payung Madinah",
-      location: "MADINAH",
-      mediaUrl: "/images/portfolio/IMG_4629.jpeg",
-      caption: "Kesejukan semilir angin di bawah naungan payung raksasa Masjid Nabawi.",
-    },
-    {
-      id: "p11",
-      title: "Puncak Menawan Khandamah",
-      location: "JABAL",
-      mediaUrl: "/images/portfolio/IMG_9650.jpeg",
-      caption: "Sudut pandang tertinggi memandang Masjidil Haram saat matahari terbenam.",
-    },
-    {
-      id: "p12",
-      title: "Doa Syahdu Bersama Pasangan",
-      location: "MEKKAH",
-      mediaUrl: "/images/portfolio/IMG_6567.jpeg",
-      caption: "Kebersamaan suami istri memanjatkan harapan terbaik di Tanah Suci.",
-    },
-  ];
-
-  const allItems = initialItems.length > 0 ? initialItems : defaultItems;
+  const allItems = initialItems;
 
   const [activeFilter, setActiveFilter] = useState<string>("ALL");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const filterOptions = [
     { label: "Semua Dokumentasi", value: "ALL" },
-    { label: "Mekkah (Haram)", value: "MEKKAH" },
+    { label: "Mekkah (Haram)", value: "MAKKAH" },
     { label: "Madinah (Nabawi)", value: "MADINAH" },
     { label: "Jabal Series", value: "JABAL" },
   ];
@@ -157,6 +69,7 @@ export default function PortfolioSection({
           })}
         </div>
 
+        {allItems.length === 0 && <p className="text-center text-slate-500">Belum ada portofolio yang dipublikasikan.</p>}
         {/* Photo Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item, index) => (

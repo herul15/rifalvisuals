@@ -47,7 +47,7 @@ export default function TestimonialsManager({
     packageTaken: "Paket Ka'bah & Pelataran (Sendiri)",
     rating: 5,
     comment: "",
-    consentGiven: true,
+    consentGiven: false,
   });
 
   const showNotification = (type: "success" | "error", message: string) => {
@@ -141,7 +141,7 @@ export default function TestimonialsManager({
         packageTaken: "Paket Ka'bah & Pelataran (Sendiri)",
         rating: 5,
         comment: "",
-        consentGiven: true,
+        consentGiven: false,
       });
       showNotification("success", "Testimoni jamaah berhasil ditambahkan.");
     } catch (err: unknown) {
@@ -220,6 +220,7 @@ export default function TestimonialsManager({
         {filteredItems.map((item) => (
           <div
             key={item.id}
+            data-testid={`testimonial-${item.id}`}
             className={`bg-[#0b1626] border rounded-2xl p-5 flex flex-col justify-between transition-all ${
               item.isApproved
                 ? "border-white/10 hover:border-[#d0a526]/30"

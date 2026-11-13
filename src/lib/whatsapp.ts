@@ -35,7 +35,7 @@ export function generateWhatsAppUrl(
     `• Paket: ${payload.packageName}\n` +
     `• Lokasi: ${payload.location}\n` +
     `• Varian Peserta: ${payload.variantLabel}\n` +
-    `• Estimasi Biaya: ${payload.priceFormatted}\n`;
+    `• Estimasi Biaya Dasar Paket: ${payload.priceFormatted}\n`;
 
   if (payload.preferredDate) {
     message += `• Rencana Tanggal: ${payload.preferredDate}\n`;
