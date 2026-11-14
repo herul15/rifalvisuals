@@ -37,7 +37,6 @@ const baseMetadata: Metadata = {
   authors: [{ name: "Rifalvisuals Indonesia" }],
   creator: "Rifalvisuals",
   icons: {
-    icon: "/images/logo-transparent.png",
     apple: "/images/logo-transparent.png",
   },
   openGraph: {
