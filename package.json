@@ -58,6 +58,6 @@
     "micromatch": "^4.0.8"
   },
   "engines": {
-    "node": "26.x"
+    "node": "24.x"
   }
 }

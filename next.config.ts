@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Shared hosting limits processes and threads separately from available CPUs.
+  experimental: {
+    cpus: 1,
+  },
   serverExternalPackages: ["@prisma/client", "bcryptjs"],
   turbopack: {
     rules: {

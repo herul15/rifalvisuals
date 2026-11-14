@@ -4,7 +4,7 @@ Website dokumentasi Umroh/Haji dan CMS admin. Next.js 16, React 19, Tailwind 4, 
 
 ## Persiapan lokal
 
-Gunakan Node.js 26 (lihat .nvmrc) dan PostgreSQL 16 atau lebih baru. Pilih Node.js 26 juga pada konfigurasi aplikasi production; CI menggunakan versi yang sama dari .nvmrc.
+Gunakan Node.js 24 (lihat .nvmrc) dan PostgreSQL 16 atau lebih baru. Pilih Node.js 24 juga pada konfigurasi aplikasi production; CI menggunakan versi yang sama dari .nvmrc.
 
 1. Jalankan npm ci dan npx prisma generate.
 2. Salin .env.example menjadi .env, isi DATABASE_URL dan JWT_SECRET. Secret wajib acak minimal 32 byte; nilai lama yang pernah tertulis di source ditolak. Buat dengan node -e "console.log(require('node:crypto').randomBytes(48).toString('hex'))" dan simpan hasilnya secara privat.
